@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	    <meta charset="UTF-8" />
+		<title>Therap :: Attendance</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+
+
+	    <link href="https://develop.therapbd.net/images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+		<link rel="stylesheet" type="text/css" href="https://develop.therapbd.net/css/jquery.jgrowl-1.2.13.min.css">
+		<link rel="stylesheet" type="text/css" href="https://develop.therapbd.net/css/scw.css">
+		<link rel="stylesheet" type="text/css" href="https://develop.therapbd.net/css/ui-lightness/jquery-ui-1.10.3.custom.min.css"/>
+		<link rel="stylesheet" type="text/css" href="https://develop.therapbd.net/css/jquery.ui.autocomplete-1.10.3.css"/>
+
+		<script type="text/javascript" src="https://develop.therapbd.net/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="https://develop.therapbd.net/js/jquery.jgrowl-1.2.13.min.js"></script>
+		<script type="text/javascript" src="https://develop.therapbd.net/js/jquery.ui-1.10.3.custom.min.js"></script>
+
+
+	    <link href="https://develop.therapbd.net/css/therapx-2015.0.0.css" rel="stylesheet" type="text/css">
+	    <link href="https://develop.therapbd.net/css/footer.css" rel="stylesheet" type="text/css">
+
+	    <script type="text/javascript" src="https://develop.therapbd.net/js/therap-2.1.js"></script>
+	    <script src="https://develop.therapbd.net/ma/js/common.js" type="text/javascript"></script>
+
+	    <!--Quick Links css and js-->
+	    <link href='https://develop.therapbd.net/ma/css/quickLinks-1.0.1.css' rel="stylesheet" type="text/css">
+	    <script src="https://develop.therapbd.net/ma/js/quickLinks-2.0.js" type="text/javascript"></script>
+
+		    
+		<style type="text/css">
+		    
+		    body{
+		        background-image:url(https://develop.therapbd.net/ma/images/newfpage/therap_bkgd.gif);
+		        background-repeat:repeat-x;
+		    }
+		    
+
+		    #buttons {
+		        background: url(/ma/images/buttons_bg.gif) repeat-x;
+		    }
+		</style>
+
+
+	    <!--Browser instrumentation for RUEI -->
+	    <!-- // <script src="https://develop.therapbd.net/ruei/ruei-1.0.0.js" type="text/javascript"></script> -->
+
+	    
+	    
+	    <link rel="stylesheet" href="https://develop.therapbd.net/ma/css/large_page.css" type="text/css" media="screen">
+	    <link rel="stylesheet" href="https://develop.therapbd.net/ma/css/jquery.timepicker.css" type="text/css" media="screen">
+	    <link rel="stylesheet" href="https://develop.therapbd.net/ma/css/simpleModal.css" type="text/css" media=screen>
+	    <link rel="stylesheet" href="https://develop.therapbd.net/ma/css/messi.1.0.css" type="text/css" media=screen>
+	    <link rel="stylesheet" href="https://develop.therapbd.net/ma/css/jquery.cluetip.2014.2.0.css" type="text/css" media=screen>
+	    <link rel="stylesheet" href="https://develop.therapbd.net/ma/css/jquery.notification-1.0.css" type="text/css" media=screen>
+	    <link rel="stylesheet" href="https://develop.therapbd.net/ma/css/attendance-2015.0.23.css" type="text/css" media="screen">
+
+	    <script language="JavaScript" src='https://develop.therapbd.net/ma/js/common.js'></script>
+	    <script language="JavaScript" src='https://develop.therapbd.net/js/jquery-1.10.2.min.js'></script>
+	    <script language="JavaScript" src='https://develop.therapbd.net/ma/js/microTemplate.js'></script>
+	    <script language="JavaScript" src='https://develop.therapbd.net/ma/js/jquery.timepicker.js'></script>
+	    <script language="JavaScript" src='https://develop.therapbd.net/js/jquery.simplemodal-1.4.4.js'></script>
+	    <script language="JavaScript" src='https://develop.therapbd.net/ma/js/messi-2015.0.16.js'></script>
+	    <script language="JavaScript" src='https://develop.therapbd.net/ma/js/jquery.notification-1.1.js'></script>
+	    <script language="JavaScript" src='https://develop.therapbd.net/ma/js/jquery.cluetip.js'></script>
+	    <script language="JavaScript" src='https://develop.therapbd.net/ma/js/jquery.hoverIntent.js'></script>
+	</head>
+	<body>		
+
+
+		<script type="text/jsx" src="js/reactComponent/AttFloatLeft.js"></script>
+		<script type="text/jsx" src="js/reactComponent/AttFloatLeft_nonBillableData.js"></script>
+		<script type="text/jsx" src="js/reactComponent/AttFloatNone.js"></script>
+
+
+		<script type="text/jsx" src="js/reactComponent/BasicInput.js"></script>
+		<script type="text/jsx" src="js/reactComponent/InputTypePanel.js"></script>	
+
+
+		<script type="text/jsx" src="js/reactComponent/TblHead.js"></script>
+		<script type="text/jsx" src="js/reactComponent/InfoBlockHeader_attFloatNone.js"></script>
+		<script type="text/jsx" src="js/reactComponent/InfoBlockHeader_attFloatNone_fixedWarningMsgDiv.js"></script>
+		<script type="text/jsx" src="js/reactComponent/AttendanceTab.js"></script>
+		<script type="text/jsx" src="js/reactComponent/TabData.js"></script>
+
+		<script type="text/jsx" src="js/reactComponent/Sections.js"></script>	
+		<script type="text/jsx" src="js/reactComponent/Content.js"></script>	
+		<script type="text/jsx" src="js/reactComponent/HeaderNew.js"></script>	
+		
+		<script type="text/jsx">			
+			
+			var Container = React.createClass({
+				render: function() {
+					return (
+						<div id="container">
+							<HeaderNew />
+							<Content />
+						</div>
+					);
+				}
+			});
+
+
+			React.render(<Container />, document.body);
+
+
+		// 	<div id="container">
+			// 	<div id="headerNew"></div>
+			// 	<div id="content"></div>
+			// 	<div id="footer_top"></div>
+			// 	<div id="footer_copyright"></div>
+			// 	<div className="clearBoth"></div>
+		// </div>
+
+		</script>
+	</body>
+</html>
