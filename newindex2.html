@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>React Table</title>             
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div id="content"></div>
+        <script type="text/javascript" src="json.js"></script>
+        <script type="text/jsx">
+        
+
+            var TableCell = React.createClass({
+				handleChange: function() {
+                    this.props.onCellCheck(this.props.row, this.props.column);
+                },
+
+                shouldComponentUpdate: function (nextProps, nextState) {
+                    return nextProps.isChecked !== this.props.isChecked; 
+                },
+				
+                render: function() {
+
+                    var tdStyle = {
+                      border: "1px solid #999",
+                      padding: "0.5rem",
+                      textAlign: "left"
+                    };
+
+                    return (
+                        <td style={tdStyle}>
+                            <p>{this.props.row}, {this.props.column}</p>
+                            <input type="checkbox" checked = {this.props.isChecked} onChange = {this.handleChange}/>
+                        </td>
+                    );       
+                }
+            });
+
+            var TableRowHead = React.createClass({
+                handleChange: function() {
+                    this.props.onRowCheck(this.props.row);
+                },
+                
+                render: function() {
+                    var cellStyle = {
+                    border: "1px solid #999",
+                    padding: "0.5rem",
+                    textAlign: "left"
+                    };
+                    return (
+                        <td style={cellStyle}>
+                            <p>{this.props.row}</p>
+                            <input type="checkbox" onChange = {this.handleChange}/>
+                        </td>
+                    )
+                }
+            });
+
+
+
+            var TableRow = React.createClass({
+
+                getInitialState : function() {
+                    return {isHorizontalChecked: false};
+                },
+
+                handleHorizontalCheck: function(event) {
+                    this.setState({isHorizontalChecked: !this.state.isHorizontalChecked});    
+                },
+
+                render: function() {  
+                    var prop = this.props.data;  
+                    var row = this.props.row; 
+                    					
+                    return (
+                        <tr>
+                            <TableRowHead row = {this.props.row} onRowCheck = {this.props.onRowCheck}/>
+                            {
+                                (function () {
+                                    var cellRows = [];
+                                    for (i = 0; i < prop.length; i++) {
+                                        cellRows.push(<TableCell row = {row} column = {i} onCellCheck = {this.props.onCellCheck} isChecked = {prop[i]}/>);
+                                    }
+
+                                    return cellRows;
+                                }.bind(this)())
+                            }
+                        </tr>
+                    );
+                }
+            });
+
+
+            var TableHeadCell = React.createClass({
+				handleChange: function() {
+                    this.props.onColumnCheck(this.props.column);
+                },
+				
+                render: function() {
+                   var thStyle = {
+                      border: "1px solid #999",
+                      padding: "0.5rem",
+                      textAlign: "left"
+                    };
+
+                    return (
+                        <td style={thStyle}>
+                            <p>{this.props.column}</p>
+                            <input type="checkbox" onChange = {this.handleChange}/>
+                        </td>
+                    )                    
+                }
+            });
+
+
+            var TableHead = React.createClass({
+                render: function() {
+                    var thStyle = {
+                      border: "1px solid #999",
+                      padding: "0.5rem",
+                      textAlign: "left"
+                    };
+                    
+                    var prop = this.props.data;
+					//var columnCheckHandler = this.props.onColumnCheck;
+                    
+                    return (
+                        <thead className="TableHead">
+                            <th>
+                                {
+                                   (function () {
+                                        var columns = []; 
+                                        for (i = 0; i < prop[0].length; i++) {
+                                            columns.push(<TableHeadCell column = {i} onColumnCheck = {this.props.onColumnCheck} />);
+                                        }
+
+                                        return columns;
+                                    }.bind(this)())
+                                }
+                            </th>
+                        </thead>
+                    );
+                }
+            });
+
+            
+            var Table = React.createClass({
+                getInitialState: function() {
+                    console.log("this is length  " + this.props.data.length)
+                    return {backingData: this.props.data};
+
+                },
+                
+                handleRowCheck: function (row) {
+                    console.log("From table Row number " + row);
+
+                    for ( i = 0; i < this.state.backingData[row].length; i++){
+                        this.state.backingData[row][i] = !this.state.backingData[row][i];
+                    }
+
+                    this.setState({backingData: this.state.backingData});
+                    console.log("Update  Row :" + (new Date()).getSeconds());
+                },
+
+                handleColumnCheck: function (column) {
+                    console.log("From table column number " + column);
+
+                    for ( i = 0; i < this.state.backingData.length; i++){
+                        for ( j = 0; j < this.state.backingData[i].length; j++){
+
+                            if(j == column){
+                                this.state.backingData[i][j] = !this.state.backingData[i][j];
+                                break;
+                            }
+                        }
+                    }
+
+                    this.setState({backingData: this.state.backingData});
+                    console.log("Update  Column :" + (new Date()).getSeconds());
+                },
+
+                handleCellCheck: function(row, column) {
+                    console.log("From table Row, column: " + row + " " + column);
+
+					this.state.backingData[row][column] = !this.state.backingData[row][column];
+                    this.setState({backingData: this.state.backingData});
+                },
+
+                render: function() {                                        
+                    var tableStyle = {
+                            borderSpacing: "2"
+                    };
+
+                    var arrayData = this.state.backingData;
+					//var rowCheckHandler = this.handleRowCheck;
+					//var cellCheckHandler = this.handleCellCheck;
+					
+                    console.log(arrayData.length);
+                    
+                    return (
+                        <table style={tableStyle}>    
+                            <TableHead data={this.state.backingData} onColumnCheck = {this.handleColumnCheck}/>                                            
+                            {
+
+                               (function() {
+                                    var rows = [];
+                                   for (i = 0; i < arrayData.length; i++) {
+                                       var array = arrayData[i];
+                                       console.log(array.length);
+                                       rows.push(<TableRow data={array} row = {i} onRowCheck = {this.handleRowCheck} onCellCheck = {this.handleCellCheck}/>);
+                                   }
+
+                                   return rows;
+                               }.bind(this)())
+                            }                                                      
+                        </table>
+                    );
+                }
+            });
+
+            var input = [];
+
+            // for(i = 0; i < 100; i++) {
+            //     input[i] = [];
+            //     for(j = 0; j < 100; j++) {
+            //         input[i][j] = false;
+            //         console.log(input[i][j]);
+            //     }
+            // }
+            console.log(JSON.stringify(input))
+
+            
+           
+            React.render(
+                <Table data={input} />, document.body
+            );
+
+        </script>
+    </body>
+</html>

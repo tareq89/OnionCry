@@ -12,40 +12,19 @@
         <script type="text/jsx">
         
 
-            var TableCell = React.createClass({
-
-                getInitialState : function() {
-                    return {isChecked: false};
-                },
-
-                handleChange: function(event) {
-                    this.setState({isChecked: !this.state.isChecked});    
-                },
-                
+            var TableCell = React.createClass({               
                 render: function() {
-                    if(this.state.isChecked) {
-                        // alert("Re rendering...");
-                    }  
-                	
+
                     var tdStyle = {
                       border: "1px solid #999",
                       padding: "0.5rem",
                       textAlign: "left"
                     };
 
-                    var rowKey = this.props.data[0];
-                    var cellKey = this.props.data[1];
-                    var cellData = this.props.data[2];
-                    var cellId = "cell"+rowKey+"-"+cellKey;
-                    var cellClass1 = "chkColumn" + cellKey;
-                    var cellClass2 = "chkRow" + cellKey;
-                    var cellClass = cellClass1 +" "+ cellClass2;
-
-
                     return (
                         <td style={tdStyle}>
-                            <p>{cellKey}</p>
-                            <input id={cellId} checked = {this.state.isChecked || this.props.horizontalChecked} className={cellClass}  type="checkbox" onClick= {this.handleChange}/>
+                            <p>{this.props.row}, {this.props.column}</p>
+                            <input type="checkbox" checked = {this.props.data}/>
                         </td>
                     );       
                 }
@@ -53,27 +32,25 @@
 
             var TableRowHead = React.createClass({
                 handleChange: function() {
-                    //alert("Testing alert!");
-                    this.props.onHorizontalCheck();
+                    this.props.onRowChecked(this.props.row);
                 },
                 
                 render: function() {
                     var cellStyle = {
-                      border: "1px solid #999",
-                      padding: "0.5rem",
-                      textAlign: "left"
+                    border: "1px solid #999",
+                    padding: "0.5rem",
+                    textAlign: "left"
                     };
-                    
                     return (
                         <td style={cellStyle}>
-                            <p>{this.props.individualName}</p>
+                            <p>{this.props.row}</p>
                             <input type="checkbox" onChange = {this.handleChange}/>
                         </td>
-                    );
+                    )
                 }
             });
 
-
+            
 
             var TableRow = React.createClass({
 
@@ -84,24 +61,27 @@
                 handleHorizontalCheck: function(event) {
                     this.setState({isHorizontalChecked: !this.state.isHorizontalChecked});    
                 },
+
+                onRowChecked: function(row) {
+                    alert("In table row : " + row);
+                    this.props.onRowCheckHere(this.props.row);
+                },
                 
-                render: function() {
-                    var rowKey = "dataRow" + this.props.data[0];                 
-                    var rowData = this.props.data[1]; 
-                    var thProps = [this.props.data[0], rowData.clientFirstName];
-                    var individualName = rowData.clientFirstName + " " + rowData.clientLastName;
-                    var temp = this.state.isHorizontalChecked;
-                    //console.log(rowData.clientFirstName)
-                    console.log("----------------------" + temp);
+                render: function() {  
+                    var prop = this.props.data;  
+                    var row = this.props.row;              
                     return (
-                        <tr className={rowKey}>
-                            <TableRowHead individualName = {individualName} onHorizontalCheck = {this.handleHorizontalCheck}/>
+                        <tr>
+                            <TableRowHead row = {this.props.row} onRowChecked = {this.onRowChecked}/>
                             {
-                                Object.keys(rowData.attendanceMap).map(function(cellKey) {
-                                    console.log("*****************************"+this.cellKey);
-                            		var cellData = [rowKey, cellKey, rowData];
-                                    return (<TableCell data={cellData} horizontalChecked = {temp}/>);
-                                })
+                                (function () {
+                                    var cellRows = [];
+                                    for (i = 0; i < prop.length; i++) {
+                                        cellRows.push(<TableCell row = {row} column = {i} data = {prop[i]}/>);
+                                    }
+
+                                    return cellRows;
+                                }())
                             }
                         </tr>
                     );
@@ -111,15 +91,18 @@
 
             var TableHeadCell = React.createClass({
                 render: function() {
-                    var thStyle = this.props.data[2];
-                    var cellKey = this.props.data[1];
-                    var id = this.props.data[0];
+                   var thStyle = {
+                      border: "1px solid #999",
+                      padding: "0.5rem",
+                      textAlign: "left"
+                    };
+
                     return (
                         <td style={thStyle}>
-                            <p>{cellKey}</p>
-                            <input id={id + cellKey} type="checkbox" />
-                        </td>)
-                    
+                            <p>{this.props.column}</p>
+                            <input type="checkbox" />
+                        </td>
+                    )                    
                 }
             });
 
@@ -131,20 +114,21 @@
                       padding: "0.5rem",
                       textAlign: "left"
                     };
-                    var firstRowAttendance = this.props.data;
-                    console.log(firstRowAttendance);
+                    
+                    var prop = this.props.data;
                     
                     return (
                         <thead className="TableHead">
                             <th>
                                 {
-                                    Object.keys(firstRowAttendance).map(function(cellKey) {
-                                        var id = "chkColumn" + cellKey;
-                                        var tabHeadCellProps = [id, cellKey, thStyle]
-                                        return (
-                                            <TableHeadCell data={tabHeadCellProps} />
-                                        )
-                                    })
+                                   (function () {
+                                        var columns = []; 
+                                        for (i = 0; i < prop[0].length; i++) {
+                                            columns.push(<TableHeadCell column = {i}/>);
+                                        }
+
+                                        return columns;
+                                    }())
                                 }
                             </th>
                         </thead>
@@ -155,26 +139,46 @@
             
             var Table = React.createClass({
                 getInitialState: function() {
+                    console.log("this is length  " + this.props.data.length)
                     return {backingData: this.props.data};
+
                 },
                 
+                onRowCheck: function (row) {
+                    alert("This is from Table " + row);
+                },
+
+                handleColumnCheck: function (column) {
+                    alert(column);
+                },
+
+                handleCellCheck: function(row, column) {
+                    alert(row + " " + column);
+                },
+
                 render: function() {                                        
                     var tableStyle = {
                             borderSpacing: "2"
                     };
 
+                    var arrayData = this.state.backingData;
+                    console.log(arrayData.length);
                     
-                    var gridData = this.props.data;
-                    var firstKey = Object.keys(gridData)[0];
-                    var firstRowAttendance = gridData[firstKey].attendanceMap;
                     return (
                         <table style={tableStyle}>    
-                            <TableHead data={firstRowAttendance} />                                            
+                            <TableHead data={this.state.backingData} onColumnCheck = {this.handleColumnCheck}/>                                            
                             {
-                               Object.keys(gridData).map(function(rowKey) {
-                           			var rowData = [rowKey, gridData[rowKey]];
-                                    return (<TableRow data={rowData} />);
-                               })
+
+                               (function() {
+                                    var rows = [];
+                                   for (i = 0; i < arrayData.length; i++) {
+                                       var array = arrayData[i];
+                                       console.log(array.length);
+                                       rows.push(<TableRow data={array} row = {i} onRowCheckHere = {this.onRowCheck} />);
+                                   }
+
+                                   return rows;
+                               }())
                             }                                                      
                         </table>
                     );
@@ -185,7 +189,7 @@
 
             for(i = 0; i < 5; i++) {
                 input[i] = [];
-                for(j = 0; j < 5; j++) {
+                for(j = 0; j < 6; j++) {
                     input[i][j] = false;
                     console.log(input[i][j]);
                 }
